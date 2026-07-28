@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: techvika-user-service
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/techvika_users_db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:techvika}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    show-extensions: true
+    display-request-duration: true
+  api-docs:
+    path: /v3/api-docs
+  packages-to-scan: com.techvika.user.restcontroller
+  paths-to-match: /api/**
+

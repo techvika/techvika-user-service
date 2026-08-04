@@ -1,8 +1,9 @@
 spring:
   application:
     name: techvika-user-service
+
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/techvika_users_db}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/techvika_user_db_local}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:techvika}
     driver-class-name: org.postgresql.Driver

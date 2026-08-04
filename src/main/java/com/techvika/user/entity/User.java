@@ -1,5 +1,6 @@
 package com.techvika.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,7 +15,9 @@ import java.time.LocalDate;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSeqGenerator")
+    @SequenceGenerator(name = "userSeqGenerator", sequenceName = "userSeq", allocationSize = 1)
+    @JsonIgnore
     private Long id;
 
     @Column(name = "first_name")

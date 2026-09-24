@@ -1,6 +1,7 @@
 package com.techvika.user.service;
 
 import com.techvika.user.dto.UserRequest;
+import com.techvika.user.dto.UserResponse;
 import com.techvika.user.entity.User;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.Optional;
 
 public interface UserService {
 
-    User createUser(UserRequest request);
+    UserResponse createUser(UserRequest request);
 
     User updateUser(Long id, UserRequest request);
 

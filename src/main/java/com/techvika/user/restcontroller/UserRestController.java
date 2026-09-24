@@ -1,8 +1,9 @@
 package com.techvika.user.restcontroller;
 
 import com.techvika.user.dto.UserRequest;
-import com.techvika.user.entity.User;
+import com.techvika.user.dto.UserResponse;
 import com.techvika.user.service.UserService;
+import com.techvika.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,12 +33,12 @@ public class UserRestController {
     @Operation(summary = "Create a new user", description = "Creates a new user with the provided details")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User created successfully",
-                    content = @Content(schema = @Schema(implementation = User.class))),
+                                content = @Content(schema = @Schema(implementation = UserResponse.class))),
             @ApiResponse(responseCode = "400", description = "Invalid input or email already in use"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<User> createUser(@Valid @RequestBody UserRequest request) {
-        User user = userService.createUser(request);
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest request) {
+        UserResponse user = userService.createUser(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
@@ -45,7 +46,7 @@ public class UserRestController {
     @Operation(summary = "Update a user", description = "Updates all fields of an existing user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User updated successfully",
-                    content = @Content(schema = @Schema(implementation = User.class))),
+                                content = @Content(schema = @Schema(implementation = com.techvika.user.entity.User.class))),
             @ApiResponse(responseCode = "400", description = "Invalid input or email already in use"),
             @ApiResponse(responseCode = "404", description = "User not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
@@ -61,7 +62,7 @@ public class UserRestController {
     @Operation(summary = "Partially update a user", description = "Partially updates specific fields of an existing user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User patched successfully",
-                    content = @Content(schema = @Schema(implementation = User.class))),
+                                content = @Content(schema = @Schema(implementation = com.techvika.user.entity.User.class))),
             @ApiResponse(responseCode = "400", description = "Invalid input or email already in use"),
             @ApiResponse(responseCode = "404", description = "User not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
@@ -76,7 +77,7 @@ public class UserRestController {
     @GetMapping
     @Operation(summary = "Get all users", description = "Retrieves a list of all users")
     @ApiResponse(responseCode = "200", description = "List of users retrieved successfully",
-            content = @Content(schema = @Schema(implementation = User.class)))
+                content = @Content(schema = @Schema(implementation = com.techvika.user.entity.User.class)))
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
@@ -86,7 +87,7 @@ public class UserRestController {
     @Operation(summary = "Get user by ID", description = "Retrieves a specific user by their ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User found and returned",
-                    content = @Content(schema = @Schema(implementation = User.class))),
+                                content = @Content(schema = @Schema(implementation = com.techvika.user.entity.User.class))),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     public ResponseEntity<User> getUserById(

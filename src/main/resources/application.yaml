@@ -28,3 +28,12 @@ springdoc:
   packages-to-scan: com.techvika.user.restcontroller
   paths-to-match: /api/**
 
+#Eureka
+eureka:
+  client:
+    service-url:
+      defaultZone : http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true

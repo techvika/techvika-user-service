@@ -1,37 +1,64 @@
 package com.techvika.user.service.impl;
 
+import com.techvika.user.dto.KycRequest;
 import com.techvika.user.dto.UserRequest;
+import com.techvika.user.dto.UserResponse;
+import com.techvika.user.entity.KycStatus;
 import com.techvika.user.entity.User;
+import com.techvika.user.exception.EmailAlreadyExistsException;
 import com.techvika.user.repository.UserRepository;
 import com.techvika.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static com.techvika.user.mapping.UserMapping.toUserResponse;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final RestTemplate restTemplate;
 
     @Override
     @Transactional
-    public User createUser(UserRequest request) {
+    public UserResponse  createUser(UserRequest request) {
+        //Save User
         if (request.getEmail() != null && userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("Email already in use");
+            throw new EmailAlreadyExistsException(request.getEmail());
         }
+
         User user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .mobile(request.getMobile())
                 .address(request.getAddress())
+                .kycStatus(KycStatus.PENDING)
                 .build();
-        return userRepository.save(user);
+      User saved = userRepository.save(user);
+
+      // Send Kyc
+      KycRequest kycRequest = new KycRequest(saved.getId(), request.getPanNumber());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<KycRequest> entity = new HttpEntity<>(kycRequest, headers);
+        restTemplate.postForEntity(
+              "http://localhost:8081/api/kychttp://localhost:8081/api/kyc",
+              entity,
+              Void.class);
+
+        return toUserResponse(saved);
     }
 
     @Override

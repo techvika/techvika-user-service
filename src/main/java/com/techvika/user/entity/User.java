@@ -7,7 +7,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "app_user")
+@Table(name = "user_tbl")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,6 +33,10 @@ public class User {
 
     private String address;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "kyc_status")
+    private KycStatus kycStatus;
+
     @Column(name = "created_at", nullable = false)
     private LocalDate createdAt;
 
@@ -40,6 +44,9 @@ public class User {
     protected void prePersist() {
         if (this.createdAt == null) {
             this.createdAt = LocalDate.now();
+        }
+        if (this.kycStatus == null) {
+            this.kycStatus = KycStatus.PENDING;
         }
     }
 }

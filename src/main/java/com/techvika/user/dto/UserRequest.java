@@ -15,8 +15,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserRequest {
 
-    private Long userId;
-
     @NotBlank(message = "First name must not be blank")
     @Size(min = 3, message = "First name must be at least 3 characters")
     private String firstName;
@@ -32,4 +30,6 @@ public class UserRequest {
     private String mobile;
 
     private String address;
+
+    private String panNumber;
 }

@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<KycRequest> entity = new HttpEntity<>(kycRequest, headers);
         restTemplate.postForEntity(
-              "http://localhost:8081/api/kychttp://localhost:8081/api/kyc",
+              "http://TECHVIKA-KYC-SERVICE:8081/api/kyc",
               entity,
               Void.class);
 

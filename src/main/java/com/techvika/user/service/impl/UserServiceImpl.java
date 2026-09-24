@@ -1,17 +1,20 @@
 package com.techvika.user.service.impl;
 
 import com.techvika.user.dto.KycRequest;
+import com.techvika.user.dto.KycResponse;
 import com.techvika.user.dto.UserRequest;
 import com.techvika.user.dto.UserResponse;
 import com.techvika.user.entity.KycStatus;
 import com.techvika.user.entity.User;
 import com.techvika.user.exception.EmailAlreadyExistsException;
+import com.techvika.user.externalservice.KycClient;
 import com.techvika.user.repository.UserRepository;
 import com.techvika.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -28,6 +31,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RestTemplate restTemplate;
+    private final KycClient kycClient;
 
     @Override
     @Transactional
@@ -119,8 +123,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
+    public Optional<UserResponse> getUserById(Long id) {
+        return userRepository.findById(id)
+                .map(user -> {
+                    ResponseEntity<KycResponse> kycResponse = kycClient.getUserById(id);
+                    UserResponse response = toUserResponse(user);
+                    response.setPanNumber(kycResponse.getBody().getPanNumber());
+                    return response;
+                });
     }
 
     @Override

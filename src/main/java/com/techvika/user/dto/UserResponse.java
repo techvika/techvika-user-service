@@ -19,4 +19,5 @@ public class UserResponse {
     private String mobile;
     private String address;
     private KycStatus kycStatus;
+    private String panNumber;
 }

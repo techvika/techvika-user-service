@@ -90,9 +90,9 @@ public class UserRestController {
                                 content = @Content(schema = @Schema(implementation = com.techvika.user.entity.User.class))),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
-    public ResponseEntity<User> getUserById(
+    public ResponseEntity<UserResponse> getUserById(
             @Parameter(description = "User ID") @PathVariable Long id) {
-        Optional<User> user = userService.getUserById(id);
+        Optional<UserResponse> user = userService.getUserById(id);
         return user.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -109,4 +109,3 @@ public class UserRestController {
         return ResponseEntity.noContent().build();
     }
 }
-

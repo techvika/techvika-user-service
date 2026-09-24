@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.1.0</version>
+		<version>4.1.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.techvika</groupId>
 	<artifactId>techvika-user-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>4.1.1-SNAPSHOT</version>
 	<name/>
 	<description/>
 	<url/>

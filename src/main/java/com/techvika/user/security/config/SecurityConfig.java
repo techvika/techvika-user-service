@@ -1,5 +1,7 @@
 package com.techvika.user.security.config;
 
+import com.techvika.user.component.AfterBasicAuthFilter;
+import com.techvika.user.component.BeforeBasicAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -25,7 +27,8 @@ public class SecurityConfig {
     public SecurityFilterChain basicAuthentication(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .securityMatcher("/api/**")
-             //   .addFilterBefore(new CustomFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new BeforeBasicAuthFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new AfterBasicAuthFilter(), BasicAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults()) // Username &Password
                 .authorizeHttpRequests((authorize)
                         -> authorize.anyRequest().authenticated());
@@ -47,7 +50,8 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails userDetails = User.withUsername("techvika")
-                .password(passwordEncoder().encode("$2a$12$9ES5zGwHCz2k51KBgdIlRu.6lEICkjcbKsuRuT/FgbbSkMZRqJKaq"))
+
+                .password("{bcrypt}$2a$12$9ES5zGwHCz2k51KBgdIlRu.6lEICkjcbKsuRuT/FgbbSkMZRqJKaq")
                 .roles("USER")
                 .build();
 

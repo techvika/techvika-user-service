@@ -25,6 +25,8 @@ public class UserRequest {
     @Email(message = "Invalid email format")
     private String email;
 
+    private String password;
+
     @NotBlank(message = "Mobile must not be blank")
     @Pattern(regexp = "^\\d{10}$", message = "Mobile must be exactly 10 digits")
     private String mobile;
@@ -32,4 +34,6 @@ public class UserRequest {
     private String address;
 
     private String panNumber;
+
+    private String role;
 }

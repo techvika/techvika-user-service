@@ -1,10 +1,13 @@
 package com.techvika.user.dto;
 
 import com.techvika.user.entity.KycStatus;
+import com.techvika.user.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -20,4 +23,5 @@ public class UserResponse {
     private String address;
     private KycStatus kycStatus;
     private String panNumber;
+    private Set<Role> roles;
 }

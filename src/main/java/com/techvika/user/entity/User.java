@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "user_tbl")
@@ -29,6 +31,8 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    private String password;
+
     private String mobile;
 
     private String address;
@@ -39,6 +43,12 @@ public class User {
 
     @Column(name = "created_at", nullable = false)
     private LocalDate createdAt;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role_tbl",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role1-id"))
+    private Set<Role> roles = new HashSet<>();
 
     @PrePersist
     protected void prePersist() {

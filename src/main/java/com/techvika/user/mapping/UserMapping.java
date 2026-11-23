@@ -14,6 +14,7 @@ public class UserMapping {
                 .mobile(user.getMobile())
                 .address(user.getAddress())
                 .kycStatus(user.getKycStatus())
+                .roles(user.getRoles())
                 .build();
     }
 }

@@ -5,9 +5,11 @@ import com.techvika.user.dto.KycResponse;
 import com.techvika.user.dto.UserRequest;
 import com.techvika.user.dto.UserResponse;
 import com.techvika.user.entity.KycStatus;
+import com.techvika.user.entity.Role;
 import com.techvika.user.entity.User;
 import com.techvika.user.exception.EmailAlreadyExistsException;
 import com.techvika.user.externalservice.KycClient;
+import com.techvika.user.repository.RoleRepository;
 import com.techvika.user.repository.UserRepository;
 import com.techvika.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -22,6 +25,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.techvika.user.mapping.UserMapping.toUserResponse;
 
@@ -32,6 +36,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RestTemplate restTemplate;
     private final KycClient kycClient;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Override
     @Transactional
@@ -41,13 +47,18 @@ public class UserServiceImpl implements UserService {
             throw new EmailAlreadyExistsException(request.getEmail());
         }
 
+        Role role = roleRepository.findByName(request.getRole())
+                .orElseThrow(() -> new RuntimeException("Role Not Found"));
+
         User user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .mobile(request.getMobile())
                 .address(request.getAddress())
                 .kycStatus(KycStatus.PENDING)
+                .roles(Set.of(role))
                 .build();
       User saved = userRepository.save(user);
 

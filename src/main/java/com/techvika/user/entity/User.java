@@ -41,13 +41,12 @@ public class User {
     @Column(name = "kyc_status")
     private KycStatus kycStatus;
 
-    @Column(name = "created_at", nullable = false)
     private LocalDate createdAt;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role_tbl",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role1-id"))
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
     @PrePersist
